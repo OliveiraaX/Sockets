@@ -1,22 +1,30 @@
 import socket
 import sys
 
-if len(sys.argv) == 3:
-    mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    mysocket.settimeout(1)
+if len(sys.argv) != 3:
+    print("Uso correto: python3 script.py <IP> <Porta>")
+    sys.exit(1)
 
-    try:
-        porta = int(sys.argv[2])
-        mysocket.connect((sys.argv[1], porta))
-        pacotes_recebidos = mysocket.recv(1024).decode()
-        print(pacotes_recebidos)
+ip_servidor = sys.argv[1]
+porta_servidor = int(sys.argv[2])
 
-    except socket.timeout:
-        print("Conexão falhou: tempo limite excedido.")
-    except socket.error as e:
-        print(f"Ocorreu um erro na conexão: {e}")
-    finally:
-        mysocket.close()
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-else:
-    print("Falta de argumento, são necessários 2 argumentos (endereço e porta).")
+try:
+    client.connect((ip_servidor, porta_servidor))
+
+    while True:
+        msg = input("Mensagem: ") + "\n"
+        client.send(msg.encode())
+        data = client.recv(1024)
+        print(f"Servidor: {data.decode()}")
+
+        if data.decode() == "sair\n" or msg == "sair\n":
+            break
+
+    client.close()
+
+except Exception as error:
+    print("Erro de conexão")
+    print(error)
+    client.close()
