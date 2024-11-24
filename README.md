@@ -15,3 +15,8 @@ Primeiro, clone o repositório para sua máquina local:
 
 ```bash
 git clone https://github.com/OliveiraaX/Sockets.git
+cd Sockets
+python3 client_udp.py <IP_DO_SERVIDOR> <PORTA>
+python3 client_tcp.py <IP_DO_SERVIDOR> <PORTA>
+```
+
