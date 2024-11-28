@@ -1,18 +1,25 @@
 import paramiko
 
-host = "127.0.0.1"
-user = "kali"
-passwd = "kali"
+try:
+    host = "127.0.0.1"
+    user = "kali"
+    passwd = "kali"
+    
+    cliente = paramiko.SSHClient()
+    cliente.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    
+    cliente.connect(host, username=user, password=passwd)
+    
+    stdin, stdout, stderr = cliente.exec_command("whoami")
+    
+    print(stdout.read().decode())
+    
+    error_output = stderr.read().decode()
+    if error_output:
+        print("Error:", error_output)
 
-client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-client.connect(host, username=user, password=passwd)
+except Exception as error:
+    print(error)
 
-while True:
-    stdin, stdout, stderr = client.exec_command(input("Comando: "))
-    for line in stdout.readlines():
-        print(line.strip())
-
-    erros = stderr.readlines()
-    if erros:
-        print(erros)
+finally:
+    cliente.close()
