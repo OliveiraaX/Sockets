@@ -2,22 +2,20 @@ import socket
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-file = open("output.txt", "w")
-
 try:
-    server.bind(("0.0.0.0", 4466))
-    server.listen(5)
-    print("Listening...")
+	server.bind(("0.0.0.0", 4433))
+	server.listen(5)
+	print("listening....")
 
-    client_socket, address = server.accept()
-    print("Received from: " + address[0])
+	client_socket, address = server.accept()
+	print("Received from: "+ address[0])
 
-    data = client_socket.recv(1024).decode()
+	while True:
+		data = client_socket.recv(1024).decode()
+		print(data)	
+		client_socket.send(input("Messagem: ").encode())
 
-    file.write(data)
-
-    server.close()
+	server.accept()
 except Exception as error:
-    print("Erro: ", error)
-    server.close()
-
+	print("ERRO: ", error)
+	server.close()
